@@ -12,55 +12,213 @@
     "program": ["pt.exe", "pt"],
     "args": ["--game", "{game}"]
   },
+  "config": [
+    {
+      "id": "main",
+      "format": "ini",
+      "file": [{ "path": "{install}/data/pt.ini" }]
+    }
+  ],
   "saves": ["{install}/data/PT_Save_Data.sav", "{install}/data/pt.ini"],
   "folders": {
     "saves": [{ "path": "{install}/data" }],
     "logs": [{ "path": "{install}/data" }]
   },
+  "groups": [{ "id": "Advanced", "advanced": true }],
   "settings": [
     {
-      "id": "backend", "label": "Graphics API", "in": "args",
-      "help": "Vulkan runs everywhere. DirectX 12 is Windows only and is needed for DLSS Frame Generation. Game's option uses your pt.ini.",
+      "id": "window", "label": "Window mode", "group": "Display",
+      "help": "Exclusive fullscreen lists the display's own modes. Borderless keeps the desktop window. Alt+Enter switches in the game.",
       "choices": [
-        { "label": "Game's option", "args": [] },
-        { "label": "Vulkan", "args": ["--backend", "vulkan"] },
-        { "label": "DirectX 12", "args": ["--backend", "d3d12"] }
-      ]
+        { "label": "Window", "set": { "display/fullscreen": "0" } },
+        { "label": "Borderless", "set": { "display/fullscreen": "1" } },
+        { "label": "Exclusive", "set": { "display/fullscreen": "2" } }
+      ],
+      "defaults": { "display/fullscreen": "0" }
     },
     {
-      "id": "vsync", "label": "V-Sync", "in": "args",
-      "help": "Off shows each frame as soon as it is finished, which can tear. Game's option uses your pt.ini.",
+      "id": "vsync", "label": "V-Sync", "group": "Display",
+      "help": "Off shows each frame as soon as it is finished, which can tear.",
       "choices": [
-        { "label": "Game's option", "args": [] },
-        { "label": "Off", "args": ["--no-vsync"] }
-      ]
+        { "label": "On", "set": { "display/vsync": "1" } },
+        { "label": "Off", "set": { "display/vsync": "0" } }
+      ],
+      "defaults": { "display/vsync": "1" }
     },
     {
-      "id": "prompts", "label": "Button prompts", "in": "args",
-      "help": "Which controller buttons the game shows. Game's option follows the last device you used.",
+      "id": "fps_limit", "label": "Frame rate limit", "group": "Display",
+      "help": "The most frames a second the game draws. None follows V-Sync.",
       "choices": [
-        { "label": "Game's option", "args": [] },
-        { "label": "PlayStation", "args": ["--prompts", "playstation"] },
-        { "label": "Xbox", "args": ["--prompts", "xbox"] },
-        { "label": "Nintendo", "args": ["--prompts", "nintendo"] }
-      ]
+        { "label": "None", "set": { "display/fps_limit": "0" } },
+        { "label": "30", "set": { "display/fps_limit": "30" } },
+        { "label": "60", "set": { "display/fps_limit": "60" } },
+        { "label": "120", "set": { "display/fps_limit": "120" } },
+        { "label": "144", "set": { "display/fps_limit": "144" } }
+      ],
+      "defaults": { "display/fps_limit": "0" }
     },
     {
-      "id": "vr", "label": "VR", "in": "args",
-      "help": "The experimental VR mode needs an OpenXR runtime and a headset. Off ignores a VR setting in pt.ini.",
+      "id": "hdr", "label": "HDR", "group": "Display",
+      "help": "HDR output, for an HDR screen with HDR turned on in the system.",
       "choices": [
-        { "label": "Game's option", "args": [] },
-        { "label": "On", "args": ["--vr"] },
-        { "label": "Off", "args": ["--no-vr"] }
-      ]
+        { "label": "Off", "set": { "display/hdr": "0" } },
+        { "label": "On", "set": { "display/hdr": "1" } }
+      ],
+      "defaults": { "display/hdr": "0" }
     },
     {
-      "id": "updates", "label": "In-game update check", "in": "args",
+      "id": "upscaler", "label": "Upscaling", "group": "Graphics",
+      "help": "Draws at a lower size and scales up. DLSS needs a GeForce RTX card, FSR 4 a recent Radeon, XeSS is Windows only. Off is as on the PS4.",
+      "choices": [
+        { "label": "Off", "set": { "upscaling/upscaler": "off" } },
+        { "label": "FSR 3", "set": { "upscaling/upscaler": "fsr3" } },
+        { "label": "FSR 4", "set": { "upscaling/upscaler": "fsr4" } },
+        { "label": "DLSS", "set": { "upscaling/upscaler": "dlss" } },
+        { "label": "XeSS", "set": { "upscaling/upscaler": "xess" } }
+      ],
+      "defaults": { "upscaling/upscaler": "off" }
+    },
+    {
+      "id": "upscale_quality", "label": "Upscaling quality", "group": "Graphics",
+      "help": "Native only smooths edges. The others draw smaller for more speed, down to Ultra Performance.",
+      "choices": [
+        { "label": "Native", "set": { "upscaling/quality": "native" } },
+        { "label": "Quality", "set": { "upscaling/quality": "quality" } },
+        { "label": "Balanced", "set": { "upscaling/quality": "balanced" } },
+        { "label": "Performance", "set": { "upscaling/quality": "performance" } },
+        { "label": "Ultra Performance", "set": { "upscaling/quality": "ultra_performance" } }
+      ],
+      "defaults": { "upscaling/quality": "quality" }
+    },
+    {
+      "id": "frame_generation", "label": "Frame generation", "group": "Graphics",
+      "help": "Adds a generated frame between two drawn ones. Needs an upscaler above. DLSS needs a GeForce RTX 40 or newer and DirectX 12.",
+      "choices": [
+        { "label": "Off", "set": { "upscaling/frame_generation": "off" } },
+        { "label": "FSR 3", "set": { "upscaling/frame_generation": "fsr3" } },
+        { "label": "DLSS", "set": { "upscaling/frame_generation": "dlss" } }
+      ],
+      "defaults": { "upscaling/frame_generation": "off" }
+    },
+    {
+      "id": "anisotropy", "label": "Texture filtering", "group": "Graphics",
+      "help": "Keeps floors and walls sharp at shallow angles. Off is the original's.",
+      "choices": [
+        { "label": "Off", "set": { "graphics/anisotropy": "0" } },
+        { "label": "2x", "set": { "graphics/anisotropy": "2" } },
+        { "label": "4x", "set": { "graphics/anisotropy": "4" } },
+        { "label": "8x", "set": { "graphics/anisotropy": "8" } },
+        { "label": "16x", "set": { "graphics/anisotropy": "16" } }
+      ],
+      "defaults": { "graphics/anisotropy": "0" }
+    },
+    {
+      "id": "motion_blur", "label": "Motion blur", "group": "Graphics",
+      "help": "The blur on fast camera turns, as in the original.",
+      "choices": [
+        { "label": "On", "set": { "graphics/motion_blur": "1" } },
+        { "label": "Off", "set": { "graphics/motion_blur": "0" } }
+      ],
+      "defaults": { "graphics/motion_blur": "1" }
+    },
+    {
+      "id": "rt_shadows", "label": "Ray traced shadows", "group": "Ray tracing",
+      "help": "Shadows traced instead of shadow maps. Sharp matches the original, Soft adds soft edges. Needs a GPU with Vulkan ray queries (not on Mac).",
+      "choices": [
+        { "label": "Off", "set": { "raytracing/shadows": "0" } },
+        { "label": "Sharp", "set": { "raytracing/shadows": "1" } },
+        { "label": "Soft", "set": { "raytracing/shadows": "2" } }
+      ],
+      "defaults": { "raytracing/shadows": "0" }
+    },
+    {
+      "id": "rt_ao", "label": "Ray traced ambient occlusion", "group": "Ray tracing",
+      "help": "Darkens corners and the space under and behind objects. Same GPU needs as ray traced shadows.",
+      "choices": [
+        { "label": "Off", "set": { "raytracing/ambient_occlusion": "0" } },
+        { "label": "On", "set": { "raytracing/ambient_occlusion": "1" } }
+      ],
+      "defaults": { "raytracing/ambient_occlusion": "0" }
+    },
+    {
+      "id": "rt_reflections", "label": "Ray traced reflections", "group": "Ray tracing",
+      "help": "Floor reflections that also show what is off screen. Experimental. Same GPU needs as ray traced shadows.",
+      "choices": [
+        { "label": "Off", "set": { "raytracing/reflections": "0" } },
+        { "label": "On", "set": { "raytracing/reflections": "1" } }
+      ],
+      "defaults": { "raytracing/reflections": "0" }
+    },
+    {
+      "id": "prompts", "label": "Button prompts", "group": "Controls",
+      "help": "Which buttons the game shows. Automatic follows the controller you used last.",
+      "choices": [
+        { "label": "Automatic", "set": { "input/prompt_style": "0" } },
+        { "label": "PlayStation", "set": { "input/prompt_style": "1" } },
+        { "label": "Xbox", "set": { "input/prompt_style": "2" } },
+        { "label": "Nintendo", "set": { "input/prompt_style": "3" } },
+        { "label": "Steam", "set": { "input/prompt_style": "4" } }
+      ],
+      "defaults": { "input/prompt_style": "0" }
+    },
+    {
+      "id": "mouse_sensitivity", "label": "Mouse sensitivity", "group": "Controls",
+      "slider": { "key": "input/mouse_sensitivity", "min": 0.25, "max": 4, "step": 0.05, "format": "%.2f" },
+      "defaults": { "input/mouse_sensitivity": "1.0" }
+    },
+    {
+      "id": "rumble", "label": "Vibration", "group": "Controls",
+      "help": "Pad vibration from the game's sounds.",
+      "choices": [
+        { "label": "On", "set": { "input/rumble": "1" } },
+        { "label": "Off", "set": { "input/rumble": "0" } }
+      ],
+      "defaults": { "input/rumble": "1" }
+    },
+    {
+      "id": "game_plus", "label": "Game+", "group": "Extras",
+      "help": "After a finished game, play with the content it unlocked. Off plays the original game.",
+      "choices": [
+        { "label": "On", "set": { "game/game_plus": "1" } },
+        { "label": "Off", "set": { "game/game_plus": "0" } }
+      ],
+      "defaults": { "game/game_plus": "1" }
+    },
+    {
+      "id": "third_person", "label": "Third person view", "group": "Extras",
+      "help": "Experimental. The camera behind the shoulder in free play. Off is the original first person view.",
+      "choices": [
+        { "label": "Off", "set": { "camera/third_person": "0" } },
+        { "label": "On", "set": { "camera/third_person": "1" } }
+      ],
+      "defaults": { "camera/third_person": "0" }
+    },
+    {
+      "id": "vr", "label": "VR", "group": "Extras",
+      "help": "Experimental. Needs an OpenXR runtime and a headset.",
+      "choices": [
+        { "label": "Off", "set": { "vr/enabled": "0" } },
+        { "label": "On", "set": { "vr/enabled": "1" } }
+      ],
+      "defaults": { "vr/enabled": "0" }
+    },
+    {
+      "id": "check_updates", "label": "In-game update check", "group": "Advanced",
       "help": "RecompLauncher already updates the game. Off stops the game from also looking for a new release.",
       "choices": [
-        { "label": "Game's option", "args": [] },
-        { "label": "Off", "args": ["--no-update-check"] }
-      ]
+        { "label": "On", "set": { "network/check_updates": "1" } },
+        { "label": "Off", "set": { "network/check_updates": "0" } }
+      ],
+      "defaults": { "network/check_updates": "1" }
+    },
+    {
+      "id": "rendering_api", "label": "Graphics API", "group": "Advanced",
+      "help": "Vulkan runs everywhere. DirectX 12 is Windows only and is needed for DLSS Frame Generation.",
+      "choices": [
+        { "label": "Vulkan", "set": { "display/rendering_api": "vulkan" } },
+        { "label": "DirectX 12", "set": { "display/rendering_api": "d3d12" } }
+      ],
+      "defaults": { "display/rendering_api": "vulkan" }
     }
   ],
   "actions": [
