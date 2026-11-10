@@ -456,6 +456,8 @@ def main():
         shutil.copytree(build / "licenses", root / "licenses",
                         ignore=shutil.ignore_patterns("enhanced-textures", "Real-ESRGAN-*.txt", "bc7enc.txt"))
     shutil.copy2(REPO / "README.md", root / "README.md")
+    # RecompLauncher reads this file from the top of the release (https://recomplauncher.com/sdk)
+    shutil.copy2(REPO / "recomplauncher.json", root / "recomplauncher.json")
     try:
         refuse_loose_data(root)
     except ValueError as error:

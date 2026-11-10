@@ -1,0 +1,69 @@
+{
+  "$schema": "https://recomplauncher.com/schema/recomplauncher.json",
+  "format": 1,
+  "repo": "LoreanXavier/pt-pc",
+  "name": "P.T. for PC",
+  "game": {
+    "kind": "folder",
+    "label": "Your dumped P.T. game folder (CUSA01127, the US release) with chunk1.psarc and texture.qar in it. A fake PKG has to be extracted first.",
+    "check": { "file": "chunk1.psarc" }
+  },
+  "start": {
+    "program": ["pt.exe", "pt"],
+    "args": ["--game", "{game}"]
+  },
+  "saves": ["{install}/data/PT_Save_Data.sav", "{install}/data/pt.ini"],
+  "folders": {
+    "saves": [{ "path": "{install}/data" }],
+    "logs": [{ "path": "{install}/data" }]
+  },
+  "settings": [
+    {
+      "id": "backend", "label": "Graphics API", "in": "args",
+      "help": "Vulkan runs everywhere. DirectX 12 is Windows only and is needed for DLSS Frame Generation. Game's option uses your pt.ini.",
+      "choices": [
+        { "label": "Game's option", "args": [] },
+        { "label": "Vulkan", "args": ["--backend", "vulkan"] },
+        { "label": "DirectX 12", "args": ["--backend", "d3d12"] }
+      ]
+    },
+    {
+      "id": "vsync", "label": "V-Sync", "in": "args",
+      "help": "Off shows each frame as soon as it is finished, which can tear. Game's option uses your pt.ini.",
+      "choices": [
+        { "label": "Game's option", "args": [] },
+        { "label": "Off", "args": ["--no-vsync"] }
+      ]
+    },
+    {
+      "id": "prompts", "label": "Button prompts", "in": "args",
+      "help": "Which controller buttons the game shows. Game's option follows the last device you used.",
+      "choices": [
+        { "label": "Game's option", "args": [] },
+        { "label": "PlayStation", "args": ["--prompts", "playstation"] },
+        { "label": "Xbox", "args": ["--prompts", "xbox"] },
+        { "label": "Nintendo", "args": ["--prompts", "nintendo"] }
+      ]
+    },
+    {
+      "id": "vr", "label": "VR", "in": "args",
+      "help": "The experimental VR mode needs an OpenXR runtime and a headset. Off ignores a VR setting in pt.ini.",
+      "choices": [
+        { "label": "Game's option", "args": [] },
+        { "label": "On", "args": ["--vr"] },
+        { "label": "Off", "args": ["--no-vr"] }
+      ]
+    },
+    {
+      "id": "updates", "label": "In-game update check", "in": "args",
+      "help": "RecompLauncher already updates the game. Off stops the game from also looking for a new release.",
+      "choices": [
+        { "label": "Game's option", "args": [] },
+        { "label": "Off", "args": ["--no-update-check"] }
+      ]
+    }
+  ],
+  "actions": [
+    { "id": "data", "label": "Saves and settings", "help": "Your save, pt.ini and the log.", "open": "saves" }
+  ]
+}
