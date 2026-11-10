@@ -10,6 +10,8 @@
 <a href="https://github.com/LoreanXavier/pt-pc/releases"><img src="https://img.shields.io/github/downloads/LoreanXavier/pt-pc/total?style=for-the-badge&color=2b2b2b" alt="Downloads"></a>
 <a href="https://discord.gg/3vKwUf2eTb"><img src="https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
 
+<a href="https://recomplauncher.com/game/pt-pc"><picture><source media="(prefers-color-scheme: dark)" srcset="https://recomplauncher.com/assets/press/launcher/badge-light.svg"><img alt="Get it on RecompLauncher" src="https://recomplauncher.com/assets/press/launcher/badge-dark.svg" height="48"></picture></a>
+
 ![Lisa in the hallway](docs/media/lisa.gif)
 
 </div>
